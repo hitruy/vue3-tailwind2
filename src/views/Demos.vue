@@ -1,54 +1,33 @@
 <template>
   <div class="w-full h-full p-16">
-    <input
-      type="text"
-      class="border border-black-300 bg-gray-200"
-      v-model="keywordInput"
-    />
+    <label for="phone">
+      <div class="py-2 text-gray-600">Your phone number :</div>
+      <vueye-phone-input v-model="phone" :outlined="true" id="phone" />
+    </label>
 
-    <ul>
-      <li v-for="k in keywords">
-        <span>
-          {{ k }}
-        </span>
-
-        <span class="text-red-500 ml-2">x</span>
-      </li>
-    </ul>
+    <div class="max-w-md py-8">
+      <code class="whitespace-pre-line">
+        {{ phone }}
+      </code>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { ref, defineComponent, onMounted, onUnmounted } from "vue";
+<script>
+import { defineComponent } from "vue";
+import VueyePhoneInput from "vueye-phone-input";
+
 export default defineComponent({
-  setup() {
-    const keywordInput = ref<string | null>(null);
-
-    const keywords = ref<string[]>([]);
-
-    function handleEnter(event: any) {
-      if (event.key === "Enter") {
-        keywords?.value?.push(keywordInput?.value ?? "");
-        keywordInput.value = "";
-      }
-    }
-
-    function removeItem(keyword: any) {
-      keywords.value = keywords?.value?.filter((item) => item !== keyword) || null;
-    }
-
-    onMounted(() => {
-      window.addEventListener("keydown", handleEnter);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener("keydown", handleEnter);
-    });
-
+  name: "app",
+  components: {
+    VueyePhoneInput,
+  },
+  data() {
     return {
-      keywordInput,
-      keywords,
-      removeItem,
+      phone: {
+        number: "",
+        nationalNumber: "",
+      },
     };
   },
 });
